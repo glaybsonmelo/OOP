@@ -5,8 +5,10 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/Window.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
 
 class Pencil {
   private:
@@ -55,12 +57,41 @@ class Bubble {
     }
 };
 
+class Board {
+  private:
+    sf::RenderWindow& window; 
+    std::vector<Bubble> bubbles;
+    int new_bubble_timeout { 30 };
+    int new_bubble_timer { 0 };
+    int hits { 0 };
+    int misses { 0 };
+  public:
+    Board(sf::RenderWindow& window): window(window) {
+      bubbles.push_back(Bubble(100, 100, 'A', 1));
+      bubbles.push_back(Bubble(200, 100, 'B', 2));
+      bubbles.push_back(Bubble(300, 100, 'C', 3));
+    };
+
+    void update() {
+      for(auto& bubble : bubbles) {
+        bubble.update();
+      }
+    }
+
+    void draw() {
+      for(auto& bubble : bubbles) {
+        bubble.draw(window);
+      }
+    }
+};
+
 class Game {
   private:
     sf::RenderWindow window;
+    Board board;
   public:
-    Game(): window(sf::VideoMode(800, 600), "Bubbles"){
-      window.setFramerateLimit(60);
+    Game(): window(sf::VideoMode(800, 600), "Bubbles"), board(window){
+      window.setFramerateLimit(30);
     };
 
     void process_events() {
@@ -72,12 +103,11 @@ class Game {
     };
 
     void draw(){
+      board.update();
       // Background color
       window.clear(sf::Color::Black);
 
-      static Bubble bubble(200, 100, 'B', 2);
-      bubble.update();
-      bubble.draw(window);
+      board.draw();
       window.display();
     };
 
