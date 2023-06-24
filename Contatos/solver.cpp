@@ -3,7 +3,7 @@
   Fiz sozinho
   Levei 1h distribuida em 2d
 */
-
+#include <iostream>
 #include <fn.hpp>
 
 class Fone {
@@ -29,6 +29,7 @@ class Contact {
   std::string name;
   bool favorited;
   std::vector<Fone> fones;
+  
 
 public:
   Contact(std::string name = "") : name(name) {}
@@ -38,6 +39,7 @@ public:
   std::vector<Fone> getFones() { return fones; }
 
   void addFone(std::string id, std::string number) {
+    this->name = name;
     for (int i = 0; i < number.size(); i++) {
       if ((number[i] < '0' || number[i] > '9') && number[i] != '(' &&
           number[i] != ')' && number[i] != '.') {
